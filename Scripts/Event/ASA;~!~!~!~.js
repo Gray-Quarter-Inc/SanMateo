@@ -66,6 +66,6 @@ if (appMatch('Building/Revision/*/*')) {
 if (appMatch('Building/Revision/*/*') && isParentRevision) {
     showDebug = false;
     showMessage = true;
-    comment('<font color=' red '>You cannot create a new Revision record from an existing Revision record. The creation of the record has been cancelled</font>');
+    comment("<font color=' red '>You cannot create a new Revision record from an existing Revision record. The creation of the record has been cancelled</font>");
     aa.cap.removeRecord(capId);
 }
