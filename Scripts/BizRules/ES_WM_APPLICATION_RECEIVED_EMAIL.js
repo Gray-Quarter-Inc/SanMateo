@@ -14,5 +14,5 @@ emailText = emailText + "Please be sure to save your receipts, photos, letters o
 emailText = emailText + "You may log in to the online site at any time to view the status at '+  <a href='https://aca-prod.accela.com/SMCGOV/'>https://aca-prod.accela.com/SMCGOV/</a> + '<BR><BR>";
 emailText = emailText + "You can visit us at '+  <a href='http://www.recycleworks.org/con_dem/index.html'>http://www.recycleworks.org/con_dem/index.html</a>";
 emailText = emailText + " for more information on construction & demolition recycling or check out this great guide for information on where to properly dispose of your items ' + <a href='http://www.recycleworks.org/pdf/CD_office_guide.pdf'>http://www.recycleworks.org/pdf/CD_office_guide.pdf</a> + '.<BR><BR>";
-emailText = emailText + ' If you have any questions please contact the Construction & Demolition program coordinator at ' +  < a href = 'sustainability@smcgov.org' > sustainability @ smcgov.org <  / a >  + ' or call at 1 (888) 442-2666.';
+emailText = emailText + " If you have any questions please contact the Construction & Demolition program coordinator at  " +  "< a href = 'sustainability@smcgov.org' > sustainability @ smcgov.org <  / a >  " + " or call at 1 (888) 442-2666.";
 emailContact2('Waste Record Successfully Submitted', emailText, 'Waste Plan Contact');
