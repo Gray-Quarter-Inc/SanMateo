@@ -186,7 +186,7 @@ if (appMatch('*/Plan Review/*/*') && AInfo['Sub Type'] == 'Comm Demo') {
     updateFee('MP41745D', 'MP_CONSTRUCTION', 'FINAL', 1, 'Y');
 }
 
-if (appMatch('*/Plan Review/*/*') && AInfo['Sub Type'] == 'Res Site Access/Water +óGé¼GÇ£ Subdivision' && AInfo['Number of Parcels'] > 0) {
+if (appMatch('*/Plan Review/*/*') && AInfo['Sub Type'] == 'Res Site Access/Water Subdivision' && AInfo['Number of Parcels'] > 0) {
     updateFee('MP41750', 'MP_CONSTRUCTION', 'FINAL', Math.ceil(AInfo['Number of Parcels'] / 25), 'Y');
 }
 
