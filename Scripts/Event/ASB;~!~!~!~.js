@@ -32,30 +32,30 @@ if (appMatch('*/*/Windows or Doors Size for Size/*') && publicUser && AInfo['Siz
 
 if (appMatch('*/*/Reroof/*') && publicUser && AInfo['Materials'] == 'Other') {
     showMessage = true;
-    comment('The use of selected materials or color needs to be approved by the Planning Division before you apply for the permit. Please visit our office at 455 County Center, 2nd Floor, Redwood City to apply for the permit +é-áin person.<br><br>');
+    comment('The use of selected materials or color needs to be approved by the Planning Division before you apply for the permit. Please visit our office at 455 County Center, 2nd Floor, Redwood City to apply for the permit in person.<br><br>');
     cancel = true;
 }
 
 if (appMatch('*/*/Reroof/*') && publicUser && AInfo['Materials'] == 'Metal') {
     showMessage = true;
-    comment('The use of selected materials or color needs to be approved by the Planning Division before you apply for the permit. Please visit our office at 455 County Center, 2nd Floor, Redwood City to apply for the permit +é-áin person.<br><br>');
+    comment('The use of selected materials or color needs to be approved by the Planning Division before you apply for the permit. Please visit our office at 455 County Center, 2nd Floor, Redwood City to apply for the permit in person.<br><br>');
     cancel = true;
 }
 
 if (appMatch('*/*/Reroof/*') && publicUser && AInfo['Materials'] == 'Reflective') {
     showMessage = true;
-    comment('The use of selected materials or color needs to be approved by the Planning Division before you apply for the permit. Please visit our office at 455 County Center, 2nd Floor, Redwood City to apply for the permit +é-áin person.<br><br>');
+    comment('The use of selected materials or color needs to be approved by the Planning Division before you apply for the permit. Please visit our office at 455 County Center, 2nd Floor, Redwood City to apply for the permit in person.<br><br>');
     cancel = true;
 }
 
 if (appMatch('*/*/Reroof/*') && publicUser && AInfo['Colors'] == 'White') {
     showMessage = true;
-    comment('The use of selected materials or color needs to be approved by the Planning Division before you apply for the permit. Please visit our office at 455 County Center, 2nd Floor, Redwood City to apply for the permit +é-áin person.<br><br>');
+    comment('The use of selected materials or color needs to be approved by the Planning Division before you apply for the permit. Please visit our office at 455 County Center, 2nd Floor, Redwood City to apply for the permit in person.<br><br>');
     cancel = true;
 }
 
 if (appMatch('*/*/Reroof/*') && publicUser && AInfo['Colors'] == 'Other') {
     showMessage = true;
-    comment('The use of selected materials or color needs to be approved by the Planning Division before you apply for the permit. Please visit our office at 455 County Center, 2nd Floor, Redwood City to apply for the permit +é-áin person.<br><br>');
+    comment('The use of selected materials or color needs to be approved by the Planning Division before you apply for the permit. Please visit our office at 455 County Center, 2nd Floor, Redwood City to apply for the permit in person.<br><br>');
     cancel = true;
 }
