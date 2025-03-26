@@ -27,7 +27,7 @@ if (appMatch('PublicWorks/*/*/*')) {
     editAppSpecific('Sewer District', AInfo['ParcelAttribute.SEWER DISTRICT']);
 }
 
-copyParcelGisObjects();
+//copyParcelGisObjects();
 if (appMatch('Planning/Project/*/*')) {
     include('ES_ENTITLEMENT_LOOP'); /* replaced branch(ES_ENTITLEMENT_LOOP) */
 }
@@ -56,16 +56,3 @@ if (appMatch('MenloParkFire/*/*/*')) {
 }
 
 formatAddressAndOwnerZips(capId);
-if (appMatch('Building/Revision/*/*')) {
-    var parentID = getParent();
-    var isParentRevision = false;
-    if (appMatch('Building/Revision/*/*', parentID))
-        isParentRevision = true;
-}
-
-if (appMatch('Building/Revision/*/*') && isParentRevision) {
-    showDebug = false;
-    showMessage = true;
-    comment("<font color=' red '>You cannot create a new Revision record from an existing Revision record. The creation of the record has been cancelled</font>");
-    aa.cap.removeRecord(capId);
-}
