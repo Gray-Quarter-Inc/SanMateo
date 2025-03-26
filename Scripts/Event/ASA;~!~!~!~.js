@@ -47,9 +47,9 @@ if (!publicUser && appMatch('WasteMgmt/*/*/*')) {
     include('ES_WM_FINAL_UPD_ASI'); /* replaced branch(ES_WM_FINAL_UPD_ASI) */
 }
 
-if (AInfo['Inspection Area'] == null) {
-    editAppSpecific('Inspection Area', AInfo['ParcelAttribute.BUILDING INSPECTION AREA']);
-}
+//if (AInfo['Inspection Area'] == null) {
+//    editAppSpecific('Inspection Area', AInfo['ParcelAttribute.BUILDING INSPECTION AREA']);
+//}
 
 if (appMatch('MenloParkFire/*/*/*')) {
     include('ES_MPF_APPSUBMITAFTER'); /* replaced branch(ES_MPF_AppSubmitAfter) */
