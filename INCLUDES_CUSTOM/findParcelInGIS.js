@@ -23,10 +23,4 @@ function findParcelInGIS(parcelId) {
         return null;
     }
 }
-/*******************************************************
-| Script/Function: formatAddressAndOwnerZips(recordId)
-| Created by: Nicolaj Bunting
-| Created on: 31May17
-| Usage: When the record is created adjust the Zip code for the Address and Owner to use the 9 digit "#####-####" format
-| Modified by: Nic Bunting (12Oct17)
-*********************************************************/
+
