@@ -59,3 +59,16 @@ if (appMatch('*/*/Reroof/*') && publicUser && AInfo['Colors'] == 'Other') {
     comment('The use of selected materials or color needs to be approved by the Planning Division before you apply for the permit. Please visit our office at 455 County Center, 2nd Floor, Redwood City to apply for the permit in person.<br><br>');
     cancel = true;
 }
+if (appMatch('Building/Revision/*/*')) {
+    var parentID = getParent();
+    var isParentRevision = false;
+    if (appMatch('Building/Revision/*/*', parentID))
+        isParentRevision = true;
+}
+
+if (appMatch('Building/Revision/*/*') && isParentRevision) {
+    showDebug = false;
+    showMessage = true;
+    comment("<font color=' red '>You cannot create a new Revision record from an existing Revision record. The creation of the record has been cancelled</font>");
+    aa.cap.removeRecord(capId);
+}
