@@ -14,6 +14,12 @@ function loadParcelAttributesTPS(thisArr) {
             logDebug("**ERROR: Failed to get Parcel object: " + parcelResult.getErrorType() + ":" + parcelResult.getErrorMessage());
         else
             var fParcelObj = parcelResult.getOutput()[0];
+
+
+        if (!fParcelObj) {
+            logDebug("Unable to retrieve parcel");
+            return;
+        }
         var fParcelModel = fParcelObj.parcelModel;
 
         var parcelAttrObj = fParcelModel.getParcelAttribute().toArray();
@@ -40,14 +46,4 @@ function loadParcelAttributesTPS(thisArr) {
         thisArr["ParcelAttribute.PlanArea"] = fParcelModel.getPlanArea();
     }
 }
-/*----------------------------------------------------------------------------------------------------/
-| GIS Related Functions
-/----------------------------------------------------------------------------------------------------*/
-/*******************************************************
-| Script/Function: multipleFEMAZones()
-| Created by: Mike Buell
-| Created on: 02June17
-| Usage: update FEMA code and add condition if multiple FEMA zones
-| Modified by: 
-| Modified on: 
-*********************************************************/
+
