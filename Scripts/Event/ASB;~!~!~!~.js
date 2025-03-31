@@ -3,6 +3,8 @@ Script Name: ApplicationSubmitBefore.js
 Converted from Std Choice: ApplicationSubmitBefore
  */
 
+if (ParcelValidatedNumber.length != 0 && ParcelValidatedNumber != "" && ParcelValidatedNumber != null)
+      loadParcelAttributesTPS(AInfo); 
 comment('FEMA = ' + AInfo['ParcelAttribute.FEMA']) // test to see if a parcel attribute is visible;
 theAddrCity = aa.env.getValue('AddressCity');
 comment('The City is : ' + theAddrCity);
