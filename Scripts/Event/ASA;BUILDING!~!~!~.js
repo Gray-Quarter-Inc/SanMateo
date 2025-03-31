@@ -39,6 +39,14 @@ if (appMatch("Building/Commercial/Add Alt Imp/NA", capId) == true) {
 
 // Commercial New
 if (appMatch("Building/Commercial/New/NA", capId) == true) {
+
+    applevel3 = aa.env.getValue('ApplicationTypeLevel3');
+    if (capName == null) {
+        updateShortNotes(applevel3);
+        editAppName(getShortNotes());
+    }
+
+
     //Script 459 Add Application Filing Full Review Fee
     include("BLD_459_ASA_AddAppFilFullRevFee");
 
