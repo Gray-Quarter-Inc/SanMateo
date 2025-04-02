@@ -24,8 +24,8 @@ function loadParcelAttributesTPS(thisArr) {
 
         var parcelAttrObj = fParcelModel.getParcelAttribute().toArray();
         for (z in parcelAttrObj)
-            thisArr["ParcelAttribute." + parcelAttrObj[z].getAttributeName()] = parcelAttrObj[z].getAttributeValue();
-
+            //thisArr["ParcelAttribute." + parcelAttrObj[z].getAttributeName()] = parcelAttrObj[z].getAttributeValue();
+            thisArr["ParcelAttribute." + parcelAttrObj[z].getB1AttributeName()] = parcelAttrObj[z].getB1AttributeValue();
         // Explicitly load some standard values
         thisArr["ParcelAttribute.Block"] = fParcelModel.getBlock();
         thisArr["ParcelAttribute.Book"] = fParcelModel.getBook();
