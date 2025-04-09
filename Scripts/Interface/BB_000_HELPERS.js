@@ -429,6 +429,7 @@ function GETEMAILASSIGNEDTOCAP(capId) {
 }
 
 function updateDocumentNames(altId, module) {
+    var docStatuses = (arguments.length > 2 && arguments[2] ? arguments[2] : ["Uploaded"]);
     var revision = getAppSpecific("Revision Number");
     if (revision == null || revision == "" || revision == undefined) {
         revision = 0;
@@ -459,6 +460,7 @@ function updateDocumentNames(altId, module) {
             var documentNo = docModel.documentNo;
             Avo_LogDebug("documentNo: " + documentNo, 2);
             var document = aa.document.getDocumentByPK(documentNo).getOutput();
+            if (!exists(document.docStatus, docStatuses)) continue;
             var oldName = document.fileName;
             var fileName = document.getFileName();
             var numIndex = fileName.lastIndexOf(".");
