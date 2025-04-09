@@ -460,7 +460,7 @@ function updateDocumentNames(altId, module) {
             var documentNo = docModel.documentNo;
             Avo_LogDebug("documentNo: " + documentNo, 2);
             var document = aa.document.getDocumentByPK(documentNo).getOutput();
-            if (!exists(document.docStatus, docStatuses)) continue;
+            if (docStatuses && !exists(document.docStatus, docStatuses)) continue;
             var oldName = document.fileName;
             var fileName = document.getFileName();
             var numIndex = fileName.lastIndexOf(".");
