@@ -27,7 +27,7 @@ if (appMatch('PublicWorks/*/*/*')) {
     editAppSpecific('Sewer District', AInfo['ParcelAttribute.SEWER DISTRICT']);
 }
 
-//copyParcelGisObjects();
+copyParcelGisObjects();
 if (appMatch('Planning/Project/*/*')) {
     include('ES_ENTITLEMENT_LOOP'); /* replaced branch(ES_ENTITLEMENT_LOOP) */
 }
