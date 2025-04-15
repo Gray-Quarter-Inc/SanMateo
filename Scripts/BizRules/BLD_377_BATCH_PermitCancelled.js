@@ -183,168 +183,172 @@ if (paramsOK) {
                         continue;
                     }
 
-                    updateAppStatus("Cancelled", "Updated by ID377 permitCancelled", capId);
-                    recordCount++;
-                    Avo_LogDebug('Set record status to "Cancelled" on record ' + altId, 1);
+                    var appStatus = cap.getCapStatus();
+
+                    if (!appStatus || (appStatus && appStatus !="Finaled")) {
+                        updateAppStatus("Cancelled", "Updated by ID377 permitCancelled", capId);
+                        recordCount++;
+                        Avo_LogDebug('Set record status to "Cancelled" on record ' + altId, 1);
 
 
-                    // Send reminder
-                    var params = aa.util.newHashtable();
+                        // Send reminder
+                        var params = aa.util.newHashtable();
 
-                    addParameter(params, "$$altID$$", altId);
+                        addParameter(params, "$$altID$$", altId);
 
-                    var result = aa.address.getAddressByCapId(capId);
-                    if (result.getSuccess() != true) {
-                        Avo_LogDebug('Failed to get addresses on record ' + altId + '. ' + result.errorType + ": " + result.errorMessage, 1);
-                        continue;
-                    }
-
-                    var addr = "";
-                    var allAddressModels = result.getOutput();
-                    Avo_LogDebug("Total Addrs(" + allAddressModels.length + ")", 2);    //debug
-
-                    for (var i in allAddressModels) {
-                        var addressModel = allAddressModels[i];
-                        if (allAddressModels.length > 1 && addressModel.primaryFlag != "Y") {
+                        var result = aa.address.getAddressByCapId(capId);
+                        if (result.getSuccess() != true) {
+                            Avo_LogDebug('Failed to get addresses on record ' + altId + '. ' + result.errorType + ": " + result.errorMessage, 1);
                             continue;
                         }
 
-                        addr = String(addressModel.displayAddress);
-                        if (!addr || addr.length == 0 || addr.toLowerCase() == "null") {
-                            addr = addressModel.houseNumberStart + " " + (addressModel.streetDirection ? addressModel.streetDirection + " " : "")
-                                + addressModel.streetName + " " + addressModel.streetSuffix + (addressModel.unitStart ? " " + addressModel.unitType
-                                    + " " + addressModel.unitStart : "") + ", " + addressModel.city + ", " + addressModel.state + ", " + addressModel.zip;
+                        var addr = "";
+                        var allAddressModels = result.getOutput();
+                        Avo_LogDebug("Total Addrs(" + allAddressModels.length + ")", 2);    //debug
 
+                        for (var i in allAddressModels) {
+                            var addressModel = allAddressModels[i];
+                            if (allAddressModels.length > 1 && addressModel.primaryFlag != "Y") {
+                                continue;
+                            }
+
+                            addr = String(addressModel.displayAddress);
+                            if (!addr || addr.length == 0 || addr.toLowerCase() == "null") {
+                                addr = addressModel.houseNumberStart + " " + (addressModel.streetDirection ? addressModel.streetDirection + " " : "")
+                                    + addressModel.streetName + " " + addressModel.streetSuffix + (addressModel.unitStart ? " " + addressModel.unitType
+                                        + " " + addressModel.unitStart : "") + ", " + addressModel.city + ", " + addressModel.state + ", " + addressModel.zip;
+
+                            }
+
+                            Avo_LogDebug("Address(" + addr + ")", 2);   //debug
+
+                            break;
                         }
+                        addParameter(params, "$$address$$", addr);
 
-                        Avo_LogDebug("Address(" + addr + ")", 2);   //debug
-
-                        break;
-                    }
-                    addParameter(params, "$$address$$", addr);
-
-                    var result = aa.parcel.getParcelByCapId(capId, aa.util.newQueryFormat());
-                    if (result.getSuccess() != true) {
-                        Avo_LogDebug('Failed to get parcels on record ' + altId + '. ' + result.errorType + ": " + result.errorMessage, 1);
-                        continue;
-                    }
-
-                    var parcelNum = 'None';
-                    var allParcelModels = result.getOutput().toArray();
-                    for (var i in allParcelModels) {
-                        var parcelModel = allParcelModels[i];
-                        if (allParcelModels.length > 1 && parcelModel.primaryParcelFlag != "Y") {
+                        var result = aa.parcel.getParcelByCapId(capId, aa.util.newQueryFormat());
+                        if (result.getSuccess() != true) {
+                            Avo_LogDebug('Failed to get parcels on record ' + altId + '. ' + result.errorType + ": " + result.errorMessage, 1);
                             continue;
                         }
 
-                        parcelNum = parcelModel.parcelNumber;
-                        Avo_LogDebug("Parcel #(" + parcelNum + ")", 2);	//debug
-                        break;
-                    }
-                    addParameter(params, "$$parcelNumber$$", parcelNum);
+                        var parcelNum = 'None';
+                        var allParcelModels = result.getOutput().toArray();
+                        for (var i in allParcelModels) {
+                            var parcelModel = allParcelModels[i];
+                            if (allParcelModels.length > 1 && parcelModel.primaryParcelFlag != "Y") {
+                                continue;
+                            }
 
-                    var alias = capModel.appTypeAlias;
-                    Avo_LogDebug("Alias(" + alias + ")", 2);    //debug
-                    addParameter(params, "$$appType$$", alias);
-
-                    // Send notification to all Applicant contacts
-                    var allContacts = getContactArray(capId);
-                    for (var i in allContacts) {
-                        var peopleModel = allContacts[i].peopleModel;
-                        var contactTypeFlag = peopleModel.contactTypeFlag;
-                        Avo_LogDebug("Contact type flag(" + contactTypeFlag + ")", 2);  //debug
-
-                        var name = "";
-                        if (contactTypeFlag == "individual") {
-                            name = String(allContacts[i].firstName + " " + allContacts[i].lastName);
+                            parcelNum = parcelModel.parcelNumber;
+                            Avo_LogDebug("Parcel #(" + parcelNum + ")", 2);	//debug
+                            break;
                         }
-                        if (contactTypeFlag == "organization") {
-                            name = String(allContacts[i].businessName);
+                        addParameter(params, "$$parcelNumber$$", parcelNum);
+
+                        var alias = capModel.appTypeAlias;
+                        Avo_LogDebug("Alias(" + alias + ")", 2);    //debug
+                        addParameter(params, "$$appType$$", alias);
+
+                        // Send notification to all Applicant contacts
+                        var allContacts = getContactArray(capId);
+                        for (var i in allContacts) {
+                            var peopleModel = allContacts[i].peopleModel;
+                            var contactTypeFlag = peopleModel.contactTypeFlag;
+                            Avo_LogDebug("Contact type flag(" + contactTypeFlag + ")", 2);  //debug
+
+                            var name = "";
+                            if (contactTypeFlag == "individual") {
+                                name = String(allContacts[i].firstName + " " + allContacts[i].lastName);
+                            }
+                            if (contactTypeFlag == "organization") {
+                                name = String(allContacts[i].businessName);
+                            }
+
+                            Avo_LogDebug("Name(" + name + ")", 2);  //debug
+
+                            var email = allContacts[i].email;
+                            if (!email || String(email).length == 0 || String(email).indexOf("@") == -1 || String(email).indexOf(".") == -1) {
+                                Avo_LogDebug("Invalid email " + email, 1);
+                                continue;
+                            }
+
+                            var contactType = String(allContacts[i].contactType);
+                            Avo_LogDebug("Contact type(" + contactType + ")", 2);	//debug
+
+                            if (contactType != "Applicant") {
+                                continue;
+                            }
+
+                            var success = sendNotification(null, email, "", template, params, new Array(), capId);
+                            if (success == true) {
+                                Avo_LogDebug('Notification "' + template + '" sent to "' + contactType + '" ' + name + ' at ' + email, 1);
+                                templateCount++;
+                            } else {
+                                Avo_LogDebug('Failed to send notification "' + template + '" to "' + contactType + '" ' + name + ' at ' + email, 1);
+                            }
                         }
 
-                        Avo_LogDebug("Name(" + name + ")", 2);  //debug
+                        // Send notification to Lic Prof
+                        var allLicProfs = getLicenseProfessional(capId);
+                        for (var i in allLicProfs) {
+                            var licNum = allLicProfs[i].licenseNbr;
+                            Avo_LogDebug("Lic #(" + licNum + ")", 2);   //debug
 
-                        var email = allContacts[i].email;
-                        if (!email || String(email).length == 0 || String(email).indexOf("@") == -1 || String(email).indexOf(".") == -1) {
-                            Avo_LogDebug("Invalid email " + email, 1);
+                            var name = String(allLicProfs[i].contactFirstName + " " + allLicProfs[i].contactLastName);
+                            //var name = String(allLicProfs[i].businessName);
+
+                            Avo_LogDebug("Name(" + name + ")", 2);  //debug
+
+                            var email = allLicProfs[i].email;
+                            if (!email || String(email).length == 0 || String(email).indexOf("@") == -1 || String(email).indexOf(".") == -1) {
+                                Avo_LogDebug("Invalid email " + email, 1);
+                                continue;
+                            }
+
+                            var licType = allLicProfs[i].licenseType;
+                            Avo_LogDebug("Lic Type(" + licType + ")", 2);   //debug
+
+                            var success = sendNotification(null, email, "", template, params, new Array(), capId);
+                            if (success == true) {
+                                Avo_LogDebug('Notification "' + template + '" sent to "' + licType + '" ' + name + ' at ' + email, 1);
+                                templateCount++;
+                            } else {
+                                Avo_LogDebug('Failed to send notification "' + template + '" to "' + licType + '" ' + name + ' at ' + email, 1);
+                            }
+                        }
+
+                        // Send notification to Owner
+                        var result = aa.owner.getOwnerByCapId(capId);
+                        if (result.getSuccess() != true) {
+                            Avo_LogDebug("Failed to get owners for record " + altId + ". " + result.errorType + ": " + result.errorMessage, 1);
                             continue;
                         }
 
-                        var contactType = String(allContacts[i].contactType);
-                        Avo_LogDebug("Contact type(" + contactType + ")", 2);	//debug
+                        var allOwners = result.getOutput();
+                        for (var i in allOwners) {
+                            var owner = allOwners[i];
 
-                        if (contactType != "Applicant") {
-                            continue;
-                        }
+                            var name = owner.ownerFullName;
+                            Avo_LogDebug("Name(" + name + ")", 2);  //debug
 
-                        var success = sendNotification(null, email, "", template, params, new Array(), capId);
-                        if (success == true) {
-                            Avo_LogDebug('Notification "' + template + '" sent to "' + contactType + '" ' + name + ' at ' + email, 1);
-                            templateCount++;
-                        } else {
-                            Avo_LogDebug('Failed to send notification "' + template + '" to "' + contactType + '" ' + name + ' at ' + email, 1);
-                        }
-                    }
+                            var email = owner.email;
+                            if (!email || String(email).length == 0 || String(email).indexOf("@") == -1 || String(email).indexOf(".") == -1) {
+                                Avo_LogDebug("Invalid email " + email, 1);
+                                continue;
+                            }
 
-                    // Send notification to Lic Prof
-                    var allLicProfs = getLicenseProfessional(capId);
-                    for (var i in allLicProfs) {
-                        var licNum = allLicProfs[i].licenseNbr;
-                        Avo_LogDebug("Lic #(" + licNum + ")", 2);   //debug
+                            if (allOwners.length > 1 && owner.primaryOwner != "Y") {
+                                continue;
+                            }
 
-                        var name = String(allLicProfs[i].contactFirstName + " " + allLicProfs[i].contactLastName);
-                        //var name = String(allLicProfs[i].businessName);
-
-                        Avo_LogDebug("Name(" + name + ")", 2);  //debug
-
-                        var email = allLicProfs[i].email;
-                        if (!email || String(email).length == 0 || String(email).indexOf("@") == -1 || String(email).indexOf(".") == -1) {
-                            Avo_LogDebug("Invalid email " + email, 1);
-                            continue;
-                        }
-
-                        var licType = allLicProfs[i].licenseType;
-                        Avo_LogDebug("Lic Type(" + licType + ")", 2);   //debug
-
-                        var success = sendNotification(null, email, "", template, params, new Array(), capId);
-                        if (success == true) {
-                            Avo_LogDebug('Notification "' + template + '" sent to "' + licType + '" ' + name + ' at ' + email, 1);
-                            templateCount++;
-                        } else {
-                            Avo_LogDebug('Failed to send notification "' + template + '" to "' + licType + '" ' + name + ' at ' + email, 1);
-                        }
-                    }
-
-                    // Send notification to Owner
-                    var result = aa.owner.getOwnerByCapId(capId);
-                    if (result.getSuccess() != true) {
-                        Avo_LogDebug("Failed to get owners for record " + altId + ". " + result.errorType + ": " + result.errorMessage, 1);
-                        continue;
-                    }
-
-                    var allOwners = result.getOutput();
-                    for (var i in allOwners) {
-                        var owner = allOwners[i];
-
-                        var name = owner.ownerFullName;
-                        Avo_LogDebug("Name(" + name + ")", 2);  //debug
-
-                        var email = owner.email;
-                        if (!email || String(email).length == 0 || String(email).indexOf("@") == -1 || String(email).indexOf(".") == -1) {
-                            Avo_LogDebug("Invalid email " + email, 1);
-                            continue;
-                        }
-
-                        if (allOwners.length > 1 && owner.primaryOwner != "Y") {
-                            continue;
-                        }
-
-                        var success = sendNotification(null, email, "", template, params, new Array(), capId);
-                        if (success == true) {
-                            Avo_LogDebug('Notification "' + template + '" sent to owner ' + name + ' at ' + email, 1);
-                            templateCount++;
-                        } else {
-                            Avo_LogDebug('Failed to send notification "' + template + '" to owner ' + name + ' at ' + email, 1);
+                            var success = sendNotification(null, email, "", template, params, new Array(), capId);
+                            if (success == true) {
+                                Avo_LogDebug('Notification "' + template + '" sent to owner ' + name + ' at ' + email, 1);
+                                templateCount++;
+                            } else {
+                                Avo_LogDebug('Failed to send notification "' + template + '" to owner ' + name + ' at ' + email, 1);
+                            }
                         }
                     }
                 }
