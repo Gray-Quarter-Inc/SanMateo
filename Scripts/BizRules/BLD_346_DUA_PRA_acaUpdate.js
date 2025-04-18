@@ -98,7 +98,7 @@
 
         } else {
             var wfHist = aa.workflow.getWorkflowHistory(capId, aa.util.newQueryFormat());
-            if (!wfHistory.getSuccess) {
+            if (!wfHist.getSuccess) {
                 Avo_LogDebug("No workflow history", 1);
                 return;
             }
