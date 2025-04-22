@@ -254,6 +254,32 @@ aa.env.setValue("ScriptReturnCode", "0"); aa.env.setValue("ScriptReturnMessage",
 /------------------------------------------------------------------------------------------------------*/
 
 //Custom Functions
+/**
+* 
+* @param {CapIDModel} cId - The CapIDModel of the record to get the primary contact email for. 
+* @returns {String} - The primary contact email address for the record. If no primary contact is found, returns all contact email addresses separated by a comma.  
+*/
+function getPrimaryContactsEmail(cId) {
+    var primaryEmail;
+    var emailArray = [];
+    var capContactResult = aa.people.getCapContactByCapID(cId);
+    if (capContactResult.getSuccess()) {
+        var capContactArray = capContactResult.getOutput();
+
+        for (var contact in capContactArray){
+            var thisContact = capContactArray[contact].getPeople();
+            if (thisContact.email) {
+                emailArray.push(thisContact.email);
+            }
+            if(thisContact.flag == 'Y' && thisContact.email && String(thisContact.email).indexOf("@") > 0  ){
+                primaryEmail = thisContact.email;
+                return primaryEmail;
+            }
+        }
+        return emailArray.join(", ");
+    }
+    return "";
+}
 
 function createFullCapRenewal(grp, typ, stype, cat, desc) {
     var appCreateResult = aa.cap.createApp(grp, typ, stype, cat, desc);
