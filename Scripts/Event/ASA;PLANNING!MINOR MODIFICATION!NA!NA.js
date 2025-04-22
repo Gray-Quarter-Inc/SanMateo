@@ -9,7 +9,7 @@ try {
                 if (childRecordArray) 
                     numberOfChildren = childRecordArray.length;
                 logDebug("Number of children " + numberOfChildren);
-                var parentAltIdPrefix = rpr + "-";
+                var parentAltIdPrefix = rpr + "-MOD";
                 var updateResult = aa.cap.updateCapAltID(capId, parentAltIdPrefix + numberOfChildren);
                 if (updateResult.getSuccess()) {
                     logDebug("Updated alt id to " + ("" + parentAltIdPrefix + numberOfChildren));
