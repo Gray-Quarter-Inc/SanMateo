@@ -1,5 +1,5 @@
 try {
-    if (!publicUser) {
+    if (publicUser) {
         var rpr = AInfo["Related Planning Record"];
         if (rpr && rpr != "") {
             parentCapId = getApplication(rpr);
@@ -22,6 +22,6 @@ try {
         }
     }    
 } catch (err) {
-    logDebug("An error occurred in ASA;PLANNING!MINOR MODIFICATION!NA!NA: " + err.message);
+    logDebug("An error occurred in CTRCA;PLANNING!MINOR MODIFICATION!NA!NA: " + err.message);
     logDebug(err.stack);
 }
