@@ -10,6 +10,7 @@
 | "The number of daily inspections scheduled for the inspection area has been exceeded. Please select another inspection date."
 | Modified by: ()
 *********************************************************/
+/*
 (function () {
     if (cancel == true) {
         return;
@@ -219,5 +220,5 @@ function getBldInspArea(recordId) {
 
     return null;
 }
-
+*/
 //aa.sendMail("noreply@smcgov.org", "PI_Test@avocette.com", "", "SMC Test: BLD_198_ISB_CheckAcaInspsRemain", debug); //debug
