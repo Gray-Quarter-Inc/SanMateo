@@ -3,16 +3,8 @@
 // Residential
 if (appMatch("Building/Residential/*/*", capId) == true) {
     if (publicUser == true) {
-        if (appMatch("Building/Residential/Window or Door/NA", capId) != true
-            && appMatch("Building/Residential/Plumbing/Water Heater", capId) != true
-            && appMatch("Building/Residential/Plumbing/NA", capId) != true
-            && appMatch("Building/Residential/Re-Roof/NA", capId) != true
-            && appMatch("Building/Residential/Siding and Stucco/NA", capId) != true
-            && appMatch("Building/Residential/Electrical/Service Upgrade", capId) != true
-            && appMatch("Building/Residential/Mechanical/HVAC", capId) != true) {
-            //Script 346 ACA Update
-            include("BLD_346_DUA_PRA_acaUpdate");
-        }
+        include("BLD_346_DUA_PRA_acaUpdate");
+        
     }
 
     //Script 376 Reinstatement
