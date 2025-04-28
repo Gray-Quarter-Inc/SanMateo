@@ -87,11 +87,11 @@
                 Avo_LogDebug("Record is only temporary", 1);
                 return;
             }
-            if (controlString = "DocumentUploadAfter") {
+            if (controlString == "DocumentUploadAfter") {
                 comment = "Document(s) uploaded";
                 updateAppStatus("ACA Update", comment, capId);
             }
-            if (controlString = "PaymentReceiveAfter") {
+            if (controlString == "PaymentReceiveAfter") {
                 comment = "Payment Received";
                 updateAppStatus("ACA Update", comment, capId);
             }
