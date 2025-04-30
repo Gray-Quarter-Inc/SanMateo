@@ -7,7 +7,7 @@ if (appMatch('Building/*/*/*') && !appMatch('Building/Residential/*/*')) {
     include('ES_BLD_APPSUBMITAFTER'); /* replaced branch(ES_BLD_AppSubmitAfter) */
 }
 
-if (appMatch('Planning/Project/*/*')) {
+if (appMatch('Planning/*/*/*')) {
     editAppSpecific('Community Area', AInfo['ParcelAttribute.COMMUNITY AREA']);
     editAppSpecific('FEMA', AInfo['ParcelAttribute.FEMA']);
     editAppSpecific('Zoning', AInfo['ParcelAttribute.ZONING DESIGNATION']);
@@ -20,6 +20,7 @@ if (appMatch('Planning/Project/*/*')) {
     editAppSpecific('GP Land Use 3', AInfo['ParcelAttribute.GP LAND USE 3']);
     editAppSpecific('Within a Scenic Corridor', AInfo['ParcelAttribute.SCENIC CORRIDOR']);
     editAppSpecific('Williamson Act', AInfo['ParcelAttribute.WILLIAMSON ACT']);
+    editAppSpecific('Current Review Cycle', 0);
 }
 
 if (appMatch('PublicWorks/*/*/*')) {
