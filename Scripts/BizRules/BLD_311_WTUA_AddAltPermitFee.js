@@ -184,12 +184,11 @@
     Avo_LogDebug("New square footage of conditioned space being added to residence (sq ft)(" + resCondSpace + ")", 2); //debug
 
     
-    if(addingADU && addingADU == "Not applicable" && resCondSpace >= 750){
+    if(addingADU && resCondSpace && ((addingADU != "Not applicable" && resCondSpace >= 750) ||(addingADU == "Not applicable" && resCondSpace))){
         quantity = 2.44 * resCondSpace;
         assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
     }
-        
-
+  
     // Percentage fees
     include("BLD_016_ASA_ResPercentageFees");
 })();
