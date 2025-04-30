@@ -62,6 +62,9 @@
     // If any of the required fields are invalid
     quantity = 0.5 * ((conditionedFormula * conditional) + (3.47 * unconditional) + (1.73 * decksAndPatio));
     assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
+    
+
+
 
     quantity = 0;
     var valuation = parseFloat(
@@ -92,15 +95,28 @@
             assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
         }
 
-        //BLD_047
-        feeCode = "BLD_047";
-        if (conditional > demolished) {
-            var addedSpace = conditional - demolished;
-            quantity = 2.44 * addedSpace;
-            assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
+       
+    } 
+    //BLD_047
+    feeCode = "BLD_047";
+    quantity = 0;
+    
+    var typeResStruct = getAppSpecific("What type of residential structure is being constructed?", capId);
+    Avo_LogDebug("Type of res structure to be constructed(" + typeResStruct + ")", 2);
+    var sqFtCondSpac = getAppSpecific("Proposed cumulative square footage of conditioned space", capId);
+    Avo_LogDebug("Proposed square footage of conditioned space(" + sqFtCondSpac + ")", 2);
+    var sqFtDem = getAppSpecific("What is the total square footage being demolished?")
+    Avo_LogDebug("Total Square footage to be demolished(" + sqFtDem + ")", 2);
+    
+    if (typeResStruct && (typeResStruct != "ADU (Detached)" || (typeResStruct == "ADU (Detached") && sqFtCondSpac >= 750)){
+        if (isNaN(valuation) != true){
+            if (sqFtCondSpac && sqFtDem && sqFtCondSpac > sqFtDem) {
+                var addedSpace = sqFtCondSpac - sqFtDem;
+                quantity = 2.44 * addedSpace;
+                assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
+            }
         }
     }
-
     // Percentage fees
     //BLD_039, 040, 043
     include("BLD_016_ASA_ResPercentageFees");
