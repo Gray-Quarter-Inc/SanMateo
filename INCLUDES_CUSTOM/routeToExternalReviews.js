@@ -23,6 +23,7 @@ function routeToExternalReviews() {
 
     for (var fIndex in checkboxFields) {
         var checkboxField = checkboxFields[fIndex];
+        var altId = aa.env.getValue("vAltId");
         logDebug(checkboxField + ":" + AInfo[checkboxField]);
         if (AInfo[checkboxField] == "CHECKED") {
             var LPNumber = lookup("P_EXTERNAL_REVIEW", checkboxField);
