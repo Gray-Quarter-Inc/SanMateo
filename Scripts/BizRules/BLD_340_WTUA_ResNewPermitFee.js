@@ -115,6 +115,10 @@
                 quantity = 2.44 * addedSpace;
                 assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
             }
+            if(sqFtCondSpace && (!sqFtDem || sqFtDem == 0)){
+                quantity = 2.44 * sqFtCondSpace;
+                assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
+            }
         }
     }
     // Percentage fees
