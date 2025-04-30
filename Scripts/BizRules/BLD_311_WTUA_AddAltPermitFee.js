@@ -152,19 +152,12 @@
     var structuralAlterationModifier = movingWalls === "Yes" ? 7.51 : 6.35;
     quantity = 0.5 * ((8.09 * residential) + (3.47 * unconditioned) + (1.73 * decks) + (structuralAlterationModifier * alteration));
     assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
+    
+    
     quantity = 0;
-
+    
 
     if (residential > 0) {
-
-        //BLD_047
-        feeCode = "BLD_047";
-
-        quantity = 2.44 * residential;
-        assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
-        quantity = 0;
-
-
         //BLD_081
         feeCode = "BLD_081";
 
@@ -179,11 +172,23 @@
             quantity = 2.05 * residential;
             assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
         }
-        quantity = 0;
-
     }
+    
+    //BLD_047
+    quantity = 0;
+    feeCode = "BLD_047";
 
+    var addingADU = parseFloat(AInfo["Are you adding an ADU or JADU within the proposed addition or alteration?"]);
+    Avo_LogDebug("Are you adding an ADU or ADJU" + addingADU + ")", 2); //debug
+    var resCondSpace = parseFloat(AInfo["New square footage of conditioned space being added to residence (sq ft)"]);
+    Avo_LogDebug("New square footage of conditioned space being added to residence (sq ft)(" + resCondSpace + ")", 2); //debug
 
+    
+    if(addingADU && resCondSpace && ((addingADU != "Not applicable" && resCondSpace >= 750) ||(addingADU == "Not applicable" && resCondSpace))){
+        quantity = 2.44 * resCondSpace;
+        assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
+    }
+  
     // Percentage fees
     include("BLD_016_ASA_ResPercentageFees");
 })();
