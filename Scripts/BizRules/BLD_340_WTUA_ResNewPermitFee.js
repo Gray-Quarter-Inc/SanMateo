@@ -115,8 +115,8 @@
                 quantity = 2.44 * addedSpace;
                 assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
             }
-            if(sqFtCondSpace && (!sqFtDem || sqFtDem == 0)){
-                quantity = 2.44 * sqFtCondSpace;
+            if(sqFtCondSpac && (!sqFtDem || sqFtDem == 0)){
+                quantity = 2.44 * sqFtCondSpac;
                 assessAndInvoiceFee(feeCode, feeSched, quantity, invoiceFee);
             }
         }
