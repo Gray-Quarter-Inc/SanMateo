@@ -178,7 +178,7 @@
     quantity = 0;
     feeCode = "BLD_047";
 
-    var addingADU = parseFloat(AInfo["Are you adding an ADU or JADU within the proposed addition or alteration?"]);
+    var addingADU = AInfo["Are you adding an ADU or JADU within the proposed addition or alteration?"];
     Avo_LogDebug("Are you adding an ADU or ADJU" + addingADU + ")", 2); //debug
     var resCondSpace = parseFloat(AInfo["New square footage of conditioned space being added to residence (sq ft)"]);
     Avo_LogDebug("New square footage of conditioned space being added to residence (sq ft)(" + resCondSpace + ")", 2); //debug
