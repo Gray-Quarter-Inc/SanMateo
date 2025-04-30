@@ -108,7 +108,7 @@
     var sqFtDem = getAppSpecific("What is the total square footage being demolished?")
     Avo_LogDebug("Total Square footage to be demolished(" + sqFtDem + ")", 2);
     
-    if (typeResStruct && (typeResStruct != "ADU (Detached)" || (typeResStruct == "ADU (Detached") && sqFtCondSpac >= 750)){
+    if (typeResStruct && (typeResStruct != "ADU (Detached)" || (typeResStruct == "ADU (Detached)" && sqFtCondSpac >= 750))){
         if (isNaN(valuation) != true){
             if (sqFtCondSpac && sqFtDem && sqFtCondSpac > sqFtDem) {
                 var addedSpace = sqFtCondSpac - sqFtDem;
