@@ -95,3 +95,10 @@ try {
         aa.sendMail("jtu@accela.com", "noreply@standarddev.org", "Debug", debug);
 
 }*/
+
+// check for publicUser so that it does not run in backoffice on renewals which fire same event
+if (publicUser)
+{
+    // Add GIS Object from Parcel, since it is not added by ACA
+    copyParcelGisObjects();
+}
