@@ -83,27 +83,52 @@
             var completeCap = cap.isCompleteCap();
             Avo_LogDebug("Complete(" + completeCap.toString() + ")", 2); //debug
 
-            if (completeCap != true) {
+            if (!completeCap || completeCap != true) {
                 Avo_LogDebug("Record is only temporary", 1);
                 return;
             }
+
             if (controlString == "DocumentUploadAfter") {
                 comment = "Document(s) uploaded";
                 updateAppStatus("ACA Update", comment, capId);
             }
-            if (controlString == "PaymentReceiveAfter") {
-                comment = "Payment Received";
-                updateAppStatus("ACA Update", comment, capId);
+            
+            var hasWFHist = false;
+            var appAccNoStatus = false;
+            var wfHist = aa.workflow.getWorkflowHistory(capId, aa.util.newQueryFormat());
+            if (wfHist.getSuccess()){
+                wfHist = wfHist.getOutput();
+                if(wfHist.length >0){
+                    hasWFHist = true;
+                }
+            }
+
+            var wfTaskResult = aa.workflow.getTasks(capId);
+            if(wfTaskResult.getSuccess()){
+                var workflowTaskArray = wfTaskResult.getOutput();
+                if (workflowTaskArray.length >0){
+                    for (t in workflowTaskArray){
+                        var workTask = workflowTaskArray[0];
+                        if (workTask.getTaskDescription() == "Application Submittal"){
+                            if (!workTask.getTaskStatus() || !workTask.getTaskStatus()== "" ){
+                                appAccNoStatus = true;
+                            }
+                        }                       
+                    }
+                }
+            }
+            
+            if (hasWFHist || !appAccNoStatus) {
+                if (controlString == "PaymentReceiveAfter") {
+                    comment = "Payment Received";
+                    updateAppStatus("ACA Update", comment, capId);
+                }
             }
 
         } else {
-            var wfHist = aa.workflow.getWorkflowHistory(capId, aa.util.newQueryFormat());
-            if (!wfHist.getSuccess) {
-                Avo_LogDebug("No workflow history", 1);
-                return;
-            }
+            
 
-            if (wfHist.getSuccess) {
+            if (wfHist.getSuccess()) {
                 wfHist = wfHist.getOutput();
                 if (wfHist.length = 0) {
                     Avo_LogDebug("Workflow History length is 0", 1);
