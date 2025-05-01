@@ -122,8 +122,234 @@
                     }
                 }
             }
+
+            var electServiceAuto = false;
+            if (appMatch("Building/Residential/Electrical/Service Upgrade", capId) == true){
+                var lessThanUpgrade = getAppSpecific("Is the service upgrade less than 300 Amps");
+                if (lessThanUpgrade && matches(lessThanUpgrade, "Y", "YES", "Yes")){
+                    Avo_LogDebug("Service Upgrade is less than 300 amps", 2);
+                    electServiceAuto = true;
+                }
+            }
+
+            var plumbAuto = false;//need clarification
+            if (appMatch("Building/Residential/Plumbing/NA", capId)==true){
+                Avo_LogDebug("plumbing record", 2);
+                plumbAuto = true;
+            }
+
+            var waterHeaterAuto = false;
+            if (appMatch("Building/Residential/Plumbing/Water Heater", capId)==true){
+                var sameSpot = getAppSpecific("Is this a replacement water heater in the same location?");
+                if (sameSpot && matches(sameSpot, "Y", "YES", "Yes")){
+                    Avo_LogDebug("water heater in same spot", 2);
+                    waterHeaterAuto = true;
+                }
+            }
             
-            if (hasWFHist || !appAccNoStatus) {
+            var windowAuto = false;
+            if (appMatch("Building/Residential/Window or Door/NA", capId) == true) {
+                var restrictedValueFound = false;
+
+                var reqTempPole = String(getAppSpecific("Trim Color", capId));
+                Avo_LogDebug("Trim Color(" + reqTempPole + ")", 2);  //debug
+
+                var matchingColor = String(getAppSpecific(
+                    "For partial window/door replacement, does the new match the existing colors? ", capId));
+                Avo_LogDebug("Matching colour?(" + matchingColor + ")", 2); //debug
+
+                var allZoningAttrs = ["ZONING DESIGNATION", "ZONING 2", "ZONING 3", "ZONING 4"];
+
+                var parcelObj = new Object();
+                loadParcelAttributes(parcelObj);
+                for (var i in allZoningAttrs) {
+                    var zoningAttrName = allZoningAttrs[i];
+                    var zoningAttr = String(parcelObj["ParcelAttribute." + zoningAttrName]);
+                    Avo_LogDebug(zoningAttrName + "(" + zoningAttr + ")", 2); //debug
+
+                    if (zoningAttr.indexOf("CD") != -1 || zoningAttr.indexOf("DR") != -1) {
+                        restrictedValueFound = true;
+                        break;
+                    }
+                }
+        
+                if (((matchingColor.toUpperCase() == "YES") || (reqTempPole.toUpperCase() == "EARTHTONE")) && !restrictedValueFound) {
+                    windowAuto = true;
+                }
+            }
+        
+            var reroofAuto= false;
+            if(appMatch("Building/Residential/Re-Roof/NA", capId) == true){
+                var altId = aa.cap.getCap(capId).getOutput().capModel.altID;
+                var earthtoneFound = false;
+                var restrictedValueFound = false;
+                        
+                var reqTempPole = String(getAppSpecific("Color", capId));
+                Avo_LogDebug("Color(" + reqTempPole + ")", 2);  //debug
+            
+                if (reqTempPole.toUpperCase() == "EARTHTONE") {
+                    earthtoneFound = true;
+                }
+            
+                var allZoningAttrs = ["ZONING DESIGNATION", "ZONING 2", "ZONING 3", "ZONING 4"];
+            
+            
+                var parcelObj = new Object();
+                loadParcelAttributes(parcelObj);
+                for (var i in allZoningAttrs) {
+                    var zoningAttrName = allZoningAttrs[i];
+                    var zoningAttr = String(parcelObj["ParcelAttribute." + zoningAttrName]);
+                    Avo_LogDebug(zoningAttrName + "(" + zoningAttr + ")", 2); //debug
+            
+                    if (zoningAttr.indexOf("CD") != -1 || zoningAttr.indexOf("DR") != -1) {
+                        restrictedValueFound = true;
+                        break;
+                    } 
+                }
+                
+                if (earthtoneFound && !restrictedValueFound) {
+                    reroofAuto = true;
+                }
+            }
+
+            
+            var sidingAuto = false;
+            if (appMatch("Building/Residential/Siding and Stucco/NA", capId) == true) {
+                var altId = aa.cap.getCap(capId).getOutput().capModel.altID;
+                var earthtoneFound = false;
+                var restrictedValueFound = false;
+
+                var reqTempPole = String(getAppSpecific("Color", capId));
+                Avo_LogDebug("Color(" + reqTempPole + ")", 2);  //debug
+
+                if (reqTempPole.toUpperCase() == "EARTHTONE") {
+                    earthtoneFound = true;
+                }
+
+                var allZoningAttrs = ["ZONING DESIGNATION", "ZONING 2", "ZONING 3", "ZONING 4"];
+
+                var parcelObj = new Object();
+                loadParcelAttributes(parcelObj);
+                for (var i in allZoningAttrs) {
+                    var zoningAttrName = allZoningAttrs[i];
+                    var zoningAttr = String(parcelObj["ParcelAttribute." + zoningAttrName]);
+                    Avo_LogDebug(zoningAttrName + "(" + zoningAttr + ")", 2); //debug
+
+                    if (zoningAttr.indexOf("CD") != -1 || zoningAttr.indexOf("DR") != -1) {
+                        restrictedValueFound = true;
+                        break;
+                    }
+                }
+
+                if (!restrictedValueFound && earthtoneFound) {
+                    sidingAuto = true;
+                }
+            }
+
+            var furnAuto = false;
+            if(appMatch("Building/Residential/Mechanical/HVAC", capId) == true){
+                var reqAllMet = true;
+                var projType = String(getAppSpecific("Project Type", capId));
+                Avo_LogDebug("Project Type(" + projType + ")", 2);  //debug
+            
+                if (projType != "Residential") {
+                    reqAllMet = false;
+                }
+            
+                var subgroupArray = ['AC', 'Furnace', 'Heat Pump', 'Boiler Installation',
+                    'Factory-built fireplace', 'Decorative gas appliances'];
+                var checkReqList = new Object(); //Check required list
+                
+                //Check the General subgroup
+                for (var i = 0; i < subgroupArray.length; i++) {
+                    var value = String(AInfo[subgroupArray[i]]);
+                    Avo_LogDebug(subgroupArray[i] + "(" + value + ")", 2); //debug
+            
+                    if (value.toUpperCase() == "CHECKED") {
+                        checkReqList[subgroupArray[i]] = true;
+                    }
+                }
+            
+            
+                if (checkReqList['Furnace']) {
+                    var newOrReplace = String(AInfo["Furnace New or Replacement"]);
+                    Avo_LogDebug("Furnace New or Replacement(" + newOrReplace + ")", 2); //debug
+            
+                    /*var furnaceGarage = String(
+                        AInfo["Furnace Is the installation or replacement located in the garage"]);
+                    Avo_LogDebug("Furnace Garage(" + furnaceGarage + ")", 2); //debug
+                    */
+            
+                    var usingExisting = String(AInfo["Furnace Using existing gas and electrical circuits?"]);
+                    Avo_LogDebug("Furnace Using existing gas and electrical circuits(" + usingExisting
+                        + ")", 2); //debug
+            
+                    var locatedSame = String(
+                        AInfo["Furnace Is the furnace/AC being located in the same location?"]);
+                    Avo_LogDebug("Furnace located in the same location?(" + locatedSame + ")", 2); //debug
+            
+                    if (newOrReplace.toUpperCase() == 'NEW' || usingExisting.toUpperCase() != 'YES' || locatedSame.toUpperCase() != 'YES') {
+                        Avo_LogDebug("Furnace requirements failed", 2); //debug
+                        reqAllMet = false;
+                    }
+                }
+                if (checkReqList['AC']) {
+                    var newOrReplace = String(AInfo["AC New or Replacement"]);
+                    Avo_LogDebug("AC New or Replacement(" + newOrReplace + ")", 2); //debug
+            
+                    /*var acGarage = String(AInfo["AC Is the installation or replacement located in the garage"]);
+                    Avo_LogDebug("AC Garage(" + acGarage + ")", 2); //debug
+                    */
+            
+                    var usingExisting = String(AInfo["AC Using existing gas and electrical circuits?"]);
+                    Avo_LogDebug("Using existing gas and electrical circuits(" + usingExisting + ")", 2); //debug
+            
+                    var locatedSame = String(AInfo["AC Is the furnace/AC being located in the same location?"]);
+                    Avo_LogDebug("AC located in the same location?(" + locatedSame + ")", 2); //debug
+            
+                    if (newOrReplace.toUpperCase() == 'NEW' || usingExisting.toUpperCase() != 'YES' || locatedSame.toUpperCase() != 'YES') {
+                        Avo_LogDebug("AC requirements failed", 2); //debug
+                        reqAllMet = false;
+                    }
+                }
+                if (checkReqList['Boiler Installation']) {
+                    var newOrReplace = String(AInfo["Boiler New or Replacement"]);
+                    Avo_LogDebug("Boiler New or Replacement(" + newOrReplace + ")", 2); //debug
+                    if (newOrReplace.toUpperCase() == 'NEW') {
+                        reqAllMet = false;
+                    }
+                }
+                if (checkReqList['Factory-built fireplace']) {
+                    var newOrReplace = String(AInfo["Factory Built Fireplace New or Replacement"]);
+                    Avo_LogDebug("Factory Built Fireplace New or Replacement(" + newOrReplace + ")", 2); //debug
+                    if (newOrReplace.toUpperCase() == 'NEW') {
+                        reqAllMet = false;
+                    }
+                }
+                if (checkReqList['Decorative gas appliances']) {
+                    var newOrReplace = String(AInfo["Decorative Gas Appliance New or Replacement"]);
+                    Avo_LogDebug("Decorative Gas Appliance New or Replacement(" + newOrReplace + ")", 2); //debug
+                    if (newOrReplace.toUpperCase() == 'NEW') {
+                        reqAllMet = false;
+                    }
+                }
+                if (checkReqList['Heat Pump']) {
+                    var newOrReplace = String(AInfo["Heat Pump New or Replacement"]);
+                    Avo_LogDebug("Heat Pump New or Replacement(" + newOrReplace + ")", 2); //debug
+                    if (newOrReplace.toUpperCase() == 'NEW') {
+                        reqAllMet = false;
+                    }
+                }
+            
+                if (reqAllMet){
+                    furnAuto = true;
+                }
+            }
+            
+
+
+            
+            if ((hasWFHist || !appAccNoStatus) && !electServiceAuto && !plumbAuto && !reroofAuto && !furnAuto && !sidingAuto && !windowAuto && !waterHeaterAuto) {
                 if (controlString == "PaymentReceiveAfter") {
                     comment = "Payment Received";
                     updateAppStatus("ACA Update", comment, capId);
