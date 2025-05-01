@@ -11,7 +11,7 @@
 *********************************************************/
 (function () {
     try {
-
+        Avo_LogDebug("Running BLD_346_DUA_PRA_acaUpdate", 1);
         var comment = "";
         if (controlString == "DocumentUploadAfter") {
             var isRevisionPermit = appMatch("Building/Revision/NA/NA", capId);
@@ -69,7 +69,10 @@
             || appMatch("Building/Residential/Electrical/Service Upgrade", capId) == true
             || appMatch("Building/Residential/Mechanical/HVAC", capId) == true) {
             //Record type exceptions 
+            Avo_LogDebug("This one of the exception record types",2);
+
             if (!capId) {
+                Avo_LogDebug("no capId", 2);
                 return;
             }
 
@@ -89,6 +92,7 @@
             }
 
             if (controlString == "DocumentUploadAfter") {
+                Avo_LogDebug("updating app status", 1);
                 comment = "Document(s) uploaded";
                 updateAppStatus("ACA Update", comment, capId);
             }
@@ -98,7 +102,7 @@
             var wfHist = aa.workflow.getWorkflowHistory(capId, aa.util.newQueryFormat());
             if (wfHist.getSuccess()){
                 wfHist = wfHist.getOutput();
-                if(wfHist.length >0){
+                if(wfHist.length > 0){
                     hasWFHist = true;
                 }
             }
@@ -110,7 +114,8 @@
                     for (t in workflowTaskArray){
                         var workTask = workflowTaskArray[0];
                         if (workTask.getTaskDescription() == "Application Submittal"){
-                            if (!workTask.getTaskStatus() || !workTask.getTaskStatus()== "" ){
+                            Avo_LogDebug("App submittal status is " + workTask.getDisposition(), 1);
+                            if (!workTask.getDisposition() || workTask.getDisposition()== "" ){
                                 appAccNoStatus = true;
                             }
                         }                       
@@ -126,7 +131,7 @@
             }
 
         } else {
-            
+            Avo_LogDebug("Not an exception record type", 1);
 
             if (wfHist.getSuccess()) {
                 wfHist = wfHist.getOutput();
