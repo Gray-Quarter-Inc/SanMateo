@@ -77,7 +77,7 @@
             }
 
             var result = aa.cap.getCap(capId);
-            if (result.getSuccess() != true) {
+            if (!result || result.getSuccess() != true) {
                 Avo_LogDebug("Failed to get cap. " + result.errorType + ': ' + result.errorMessage, 1);
                 return;
             }
@@ -99,8 +99,8 @@
             
             var hasWFHist = false;
             var appAccNoStatus = false;
-            var wfHist = aa.workflow.getWorkflowHistory(capId, aa.util.newQueryFormat());
-            if (wfHist.getSuccess()){
+            var wfHist = aa.workflow.getWorkflowHistory(capId, null);
+            if (wfHist && wfHist.getSuccess()){
                 wfHist = wfHist.getOutput();
                 if(wfHist.length > 0){
                     hasWFHist = true;
@@ -108,7 +108,7 @@
             }
 
             var wfTaskResult = aa.workflow.getTasks(capId);
-            if(wfTaskResult.getSuccess()){
+            if(wfTaskResult && wfTaskResult.getSuccess()){
                 var workflowTaskArray = wfTaskResult.getOutput();
                 if (workflowTaskArray.length >0){
                     for (t in workflowTaskArray){
@@ -358,8 +358,8 @@
 
         } else {
             Avo_LogDebug("Not an exception record type", 1);
-
-            if (wfHist.getSuccess()) {
+            var wfHist = aa.workflow.getWorkflowHistory(capId, null);
+            if (wfHist && wfHist.getSuccess()) {
                 wfHist = wfHist.getOutput();
                 if (wfHist.length = 0) {
                     Avo_LogDebug("Workflow History length is 0", 1);
