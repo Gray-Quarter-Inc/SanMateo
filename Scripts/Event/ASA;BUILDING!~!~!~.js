@@ -654,7 +654,52 @@ if (appMatch("Building/Residential/Window or Door/NA", capId) != true
     }
 }
 */
+if(!publicUser){ //12878-GQ-JF-5/7/2025
+	if(appMatch('Building/Auto Issue/NA/NA', capId) ){
+		   var unitAmount1 = aa.cap.getBValuatn4AddtInfo(capId).getOutput()
+		   var unitAmount = unitAmount1.getEstimatedValue()
+		}
 
+		if(matches(appTypeString,'Building/Commercial/Add Alt Imp/NA', 'Building/Commercial/New/NA','Building/Residential/Deck and Patio/NA', 
+				   'Building/Residential/Bath Kitchen Remodel/NA', 'Building/Residential/Pool or Spa/NA')){
+		   unitAmount = getAppSpecific('What is the construction valuation including labor and materials?')
+		}
+		
+		if(matches(appTypeString,'Building/Residential/Demolition/NA', 'Building/Residential/Electrical/Generator', 'Building/Residential/Electrical/Car Charger',
+				   'Building/Residential/Electrical/Service Upgrade', 'Building/Residential/Electrical/Storage Systems', 'Building/Residential/Fire Systems/NA',
+				   'Building/Residential/Mechanical/HVAC', 'Building/Residential/Plumbing/Water Heater', 
+				   'Building/Residential/Electrical/PV Solar', 'Building/Residential/Re-Roof/NA', 'Building/Residential/Siding and Stucco/NA',
+				   'Building/Residential/Skylight/NA', 'Building/Residential/Electrical/Temporary Power Pole', 'Building/Commercial/Temp Struc/NA',
+				   'Building/Residential/Plumbing/Water Heater', 'Building/Residential/Window or Door/NA')){
+		   unitAmount = getAppSpecific('Valuation')
+		}
+		
+		if(appMatch('Building/Residential/Propane Tank/NA',capId) ){
+		   unitAmount = getAppSpecific('What is the construction valuation of this project including labor and materials?')
+		}
+
+		if(matches(appTypeString,'Building/Residential/Addition/NA', 'Building/Residential/Detached Structure/Full Utilities', 'Building/Residential/New/NA')){aa.print("ok")
+		   unitAmount = getAppSpecific('What is the construction valuation for this project including labor and materials?')
+		}
+		if(appMatch('Building/Commercial/Signs and Awnings/NA',capId)){
+			unitAmount = getAppSpecific('ConstValuation')
+		}
+		if(unitAmount){
+			var bcv = aa.finance.createBCalcValuatnScriptModel();
+				bcv.setCapID(capId);
+				bcv.setUseTyp("Manual Valuation");
+				bcv.setConTyp("NA");
+				bcv.setVersion(1);
+				bcv.setUnitValue(unitAmount);
+				bcv.setAuditStatus("A");
+				bcv.setAuditID(currentUserID);
+				createResult = aa.finance.createBCalcValuatn(bcv);
+		if (createResult.getSuccess())
+			aa.print("New Valuation has been created successfully for record: " + capId.getCustomID());
+		else
+			aa.print("Failed to create a new Valuation for record: " + capId.getCustomID() + ", " + createResult.getErrorMessage());
+		}
+}
 //************Keeping the fee scripts at the bottom to prevent any fee amount discrepancy issue.************
 //Exclude Landscaping
 if (appMatch("Building/Residential/Landscaping/NA", capId) != true
