@@ -678,9 +678,9 @@ if(!publicUser){ //12878-GQ-JF-5/7/2025
 		   unitAmount = getAppSpecific('What is the construction valuation of this project including labor and materials?')
 		}
 
-		if(matches(appTypeString,'Building/Residential/Addition/NA', 'Building/Residential/Detached Structure/Full Utilities', 'Building/Residential/New/NA')){aa.print("ok")
-		   unitAmount = getAppSpecific('What is the construction valuation for this project including labor and materials?')
-		}
+//		if(matches(appTypeString,'Building/Residential/Addition/NA', 'Building/Residential/Detached Structure/Full Utilities', 'Building/Residential/New/NA')){
+//		   unitAmount = getAppSpecific('What is the construction valuation for this project including labor and materials?')
+//		}
 		if(appMatch('Building/Commercial/Signs and Awnings/NA',capId)){
 			unitAmount = getAppSpecific('ConstValuation')
 		}
