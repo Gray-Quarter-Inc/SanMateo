@@ -278,13 +278,14 @@ if (paramsOK) {
                         continue;
                     }
 
-                    //Generate report "Building Permit" and attach to record. 
-                    var reportName = "Building Permit";
+                    //Generate report "Building Permit (generate to record)" and attach to record. 
+                    var reportName = "Building Permit (generate to record)";
                     var reportParams = aa.util.newHashMap();
                     reportParams.put("capid", altId);
 
-                    var capTypeModel = cap.getCapType();
-                    var module = String(capTypeModel.getGroup());
+                    //var capTypeModel = cap.getCapType();
+                    //var module = String(capTypeModel.getGroup());
+                    var module = capGroup;
                     Avo_LogDebug("Module(" + module + ")", 2); //debug
 
                     var report = generateReport(capId, reportName, module, reportParams);
