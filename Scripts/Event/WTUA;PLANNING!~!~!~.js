@@ -21,11 +21,26 @@ if(wfTask == "Project Analysis" && wfStatus == "Resubmittal Required") {
 if(wfTask == "Application Submittal" && wfStatus =="Deemed Complete") {
     comment('**Sending email P_DEEMED_COMPLETE**');
     var altID = capId.getCustomID();
+   var primaryEmail = "";
+    var primaryContactName = "";
+    var capContactResult = aa.people.getCapContactByCapID(capId);
+    if (capContactResult.getSuccess()) {
+        var capContactArray = capContactResult.getOutput();
+  
+        for (var contact in capContactArray){
+            var thisContact = capContactArray[contact].getPeople();
+            if(thisContact.flag == 'Y' ){
+                primaryEmail = thisContact.email;
+                primaryContactName = thisContact.getFirstName() + " " + thisContact.getLastName();
+            }
+        }
+    }
     var asyncParams = aa.util.newHashMap();
     addParameter(asyncParams, "vEmailTemplate", "P_DEEMED_COMPLETE");
     addParameter(asyncParams, "vAltId", altID);
-    addParameter(asyncParams, "vContactType", "Applicant");
-    //addParameter(asyncParams, "vContactName", "Applicant");
+    addParameter(asyncParams, "vToEmail", primaryEmail);
+    //addParameter(asyncParams, "vContactType", Applicant);
+    addParameter(asyncParams, "vContactName", primaryContactName);
     addParameter(asyncParams, "vReportModule", "Planning");
     addParameter(asyncParams, "vReportName", "");
     addParameter(asyncParams, "vReportAltId", altID);
