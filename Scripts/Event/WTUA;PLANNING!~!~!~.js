@@ -38,8 +38,8 @@ if(wfTask == "Application Submittal" && wfStatus =="Deemed Complete") {
     var asyncParams = aa.util.newHashMap();
     addParameter(asyncParams, "vEmailTemplate", "P_DEEMED_COMPLETE");
     addParameter(asyncParams, "vAltId", altID);
-    addParameter(asyncParams, "vToEmail", primaryEmail);
-    //addParameter(asyncParams, "vContactType", Applicant);
+    addParameter(asyncParams, "vToEmail", "ALLCONTACTS");
+    //addParameter(asyncParams, "vContactType", "Applicant");
     addParameter(asyncParams, "vContactName", primaryContactName);
     addParameter(asyncParams, "vReportModule", "Planning");
     addParameter(asyncParams, "vReportName", "");
