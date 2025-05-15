@@ -157,6 +157,45 @@ function getContactObjs(itemCap) // optional typeToLoad, optional return only on
             
 }
 
+function contactObj(ccsm)  {
+
+    this.people = null;         // for access to the underlying data
+    this.capContact = null;     // for access to the underlying data
+    this.capContactScript = null;   // for access to the underlying data
+    this.capId = null;
+    this.type = null;
+    this.seqNumber = null;
+    this.refSeqNumber = null;
+    this.asiObj = null;
+    this.asi = new Array();    // associative array of attributes
+    this.primary = null;
+    this.relation = null;
+    this.addresses = null;  // array of addresses
+    this.validAttrs = false;
+        
+    this.capContactScript = ccsm;
+    if (ccsm)  {
+        if (ccsm.getCapContactModel == undefined) {  // page flow
+            this.people = this.capContactScript.getPeople();
+            this.refSeqNumber = this.capContactScript.getRefContactNumber();
+            }
+        else {
+            this.capContact = ccsm.getCapContactModel();
+            this.people = this.capContact.getPeople();
+            this.refSeqNumber = this.capContact.getRefContactNumber();       
+        }  
+
+        //this.primary = this.capContact.getPrimaryFlag().equals("Y");
+        this.relation = this.people.relation;
+        this.seqNumber = this.people.contactSeqNumber;
+        this.type = this.people.getContactType();
+        this.capId = this.capContactScript.getCapID();
+      
+    }       
+    this.toString = function() { return this.capId + " : " + this.type + " " + this.people.getLastName() + "," + this.people.getFirstName() + " (id:" + this.seqNumber + "/" + this.refSeqNumber + ")" }
+    
+} 
+
 function getAppSpecific(itemName)  // optional: itemCap
 {
 	var updated = false;
