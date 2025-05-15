@@ -15,6 +15,7 @@ useAppSpecificGroupName = false
 
 try {
 	logDebug("ASYNC_SEND_EMAIL");
+    
 
 	capId = aa.cap.getCapID(altId).getOutput();
 	cap = aa.cap.getCap(capId).getOutput();
@@ -111,6 +112,13 @@ aa.env.setValue("ScriptReturnMessage", "ASYNC_SEND_EMAIL" + debug);
 
 
 //Custom Functions
+
+function exists(eVal, eArray) {
+	  for (ii in eArray)
+	  	if (eArray[ii] == eVal) return true;
+	  return false;
+}
+
 function sleep(seconds) 
 {
   var e = new Date().getTime() + (seconds * 1000);
@@ -121,7 +129,12 @@ function sleep(seconds)
 function getContactObjs(itemCap) // optional typeToLoad, optional return only one instead of Array?
 {
     var typesToLoad = false;
-    if (arguments.length == 2) typesToLoad = arguments[1];
+    if (arguments.length == 2) {
+        var typeStr = arguments[1];
+        if (typeStr && typeStr != "")
+            typesToLoad = [ typeStr ];
+    }
+    
     var capContactArray = new Array();
     var cArray = new Array();
     //if (itemCap.getClass().toString().equals("com.accela.aa.aamain.cap.CapModel"))   { // page flow script 
