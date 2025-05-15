@@ -2,6 +2,9 @@ var emailTemplate = aa.env.getValue("vEmailTemplate");
 var emailTo = aa.env.getValue("vToEmail");
 var altId = aa.env.getValue("vAltId");
 var contactName = aa.env.getValue("vContactName");
+var contactTypeToSend = null;
+if (aa.env.getValue("vContactType") && aa.env.getValue("vContactType") != "") contactTypeToSend = aa.env.getValue("vContactType");
+var contactType = aa.env.getValue("vContactType");
 var reportName = aa.env.getValue("vReportName");
 var reportModule = aa.env.getValue("vReportModule");
 var docType = aa.env.getValue("vDocumentType");
@@ -12,6 +15,7 @@ useAppSpecificGroupName = false
 
 try {
 	logDebug("ASYNC_SEND_EMAIL");
+
 	capId = aa.cap.getCapID(altId).getOutput();
 	cap = aa.cap.getCap(capId).getOutput();
 	var capDetail = aa.cap.getCapDetail(capId).getOutput();
@@ -43,8 +47,8 @@ try {
 	}
 
     var uniqueEmails = []; // Use an array to store unique email addresses
-    if (emailTo == "ALLCONTACTS") {
-        var contactObjArray = getContactObjs(capId, null);
+    if (emailTo == "ALLCONTACTS" || contactTypeToSend) {
+        var contactObjArray = getContactObjs(capId, contactTypeToSend);
         var contactEmailMap = {}; // Use an object to map emails to contact objects
 
         // Iterate over each contact object to gather email addresses
@@ -111,6 +115,46 @@ function sleep(seconds)
 {
   var e = new Date().getTime() + (seconds * 1000);
   while (new Date().getTime() <= e) {}
+}
+
+ 
+function getContactObjs(itemCap) // optional typeToLoad, optional return only one instead of Array?
+{
+    var typesToLoad = false;
+    if (arguments.length == 2) typesToLoad = arguments[1];
+    var capContactArray = new Array();
+    var cArray = new Array();
+    //if (itemCap.getClass().toString().equals("com.accela.aa.aamain.cap.CapModel"))   { // page flow script 
+    if (!cap.isCompleteCap() && controlString != "ApplicationSubmitAfter") {
+
+        if (cap.getApplicantModel()) {
+            capContactArray[0] = cap.getApplicantModel();
+        }
+            
+        if (cap.getContactsGroup().size() > 0) {
+            var capContactAddArray = cap.getContactsGroup().toArray();
+            for (ccaa in capContactAddArray)
+                capContactArray.push(capContactAddArray[ccaa]);     
+        }
+    }
+    else {
+        var capContactResult = aa.people.getCapContactByCapID(itemCap);
+        if (capContactResult.getSuccess()) {
+            var capContactArray = capContactResult.getOutput();
+            }
+        }
+
+    if (capContactArray) {
+        for (var yy in capContactArray) {
+            if (!typesToLoad || exists(capContactArray[yy].getPeople().contactType, typesToLoad)) {
+                cArray.push(new contactObj(capContactArray[yy]));
+            }
+        }
+    }
+    
+    logDebug("getContactObj returned " + cArray.length + " contactObj(s)");
+    return cArray;
+            
 }
 
 function getAppSpecific(itemName)  // optional: itemCap
