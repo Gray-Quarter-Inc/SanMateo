@@ -51,7 +51,7 @@ if(wfTask == "Application Submittal" && wfStatus =="Deemed Complete") {
 if (appMatch("Planning/Pre Application/NA/NA") && wfTask == "Public Workshop" && wfStatus == "Workshop Held") {
     var asyncParams = aa.util.newHashMap();
     addParameter(asyncParams, "vEmailTemplate", "P_PUBLIC_WORKSHOP_SUMMARY");
-    addParameter(asyncParams, "vAltId", altID);
+    addParameter(asyncParams, "vAltId", capId.getCustomID());
     addParameter(asyncParams, "vContactType", "Applicant");
     addParameter(asyncParams, "vDocumentType", "Public Workshop Summary");
     aa.runAsyncScript("ASYNC_SEND_EMAIL", asyncParams);
