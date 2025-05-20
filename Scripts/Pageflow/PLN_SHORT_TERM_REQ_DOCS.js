@@ -36,8 +36,8 @@ try {
 
     var blockSubmitStr = "The application type requires: ";
 	var blockSub = false;
-    var requiredDocTypes = ["Recorded Deed or Current Property Tax Bill" ,"Copy of Transient Occupancy Tax Certificate", "Certificate of Liability Insurance",
-        "Site Plan", "Floor Plan", "Photo Verification House Address Signage", "Photo Verification of Smoke and Carbon Monoxide Alarm", "Photo Verification of Fire Extinguishers",
+    var requiredDocTypes = ["Proof of Ownership" ,"Copy of Transient Occupancy Tax Certificate", "Certificate of Liability Insurance",
+        "Site Plan", "Floor Plan of Residence", "Photo Verification of House Address Signage", "Photo Verification of Installed Smoke and Carbon Monoxide Alarm", "Photo Verification of InstalledFire Extinguishers",
         "Copy of Lease Agreement" 
     ];
 
