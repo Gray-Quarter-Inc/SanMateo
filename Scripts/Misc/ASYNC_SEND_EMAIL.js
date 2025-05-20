@@ -1,7 +1,7 @@
 var emailTemplate = aa.env.getValue("vEmailTemplate");
 var emailTo = aa.env.getValue("vToEmail");
 var altId = aa.env.getValue("vAltId");
-var wfComment = aa.env.getValue("wfComment");
+var wfComment = aa.env.getValue("vwfComment");
 var contactName = aa.env.getValue("vContactName");
 var contactTypeToSend = null;
 if (aa.env.getValue("vContactType") && aa.env.getValue("vContactType") != "") contactTypeToSend = aa.env.getValue("vContactType");

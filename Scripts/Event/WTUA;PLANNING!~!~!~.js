@@ -39,7 +39,7 @@ if(wfTask == "Application Submittal" && wfStatus =="Deemed Complete") {
     addParameter(asyncParams, "vEmailTemplate", "P_DEEMED_COMPLETE");
     addParameter(asyncParams, "vAltId", altID);
     addParameter(asyncParams, "vToEmail", "ALLCONTACTS");
-    addParameter(asyncParams, "vwfComments",wfComment);
+    addParameter(asyncParams, "vwfComment",wfComment);
     //addParameter(asyncParams, "vContactType", "Applicant");
     addParameter(asyncParams, "vContactName", primaryContactName);
     addParameter(asyncParams, "vReportModule", "Planning");
