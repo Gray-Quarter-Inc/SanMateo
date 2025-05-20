@@ -47,6 +47,35 @@ if(wfTask == "Application Submittal" && wfStatus =="Deemed Complete") {
     aa.runAsyncScript("ASYNC_SEND_EMAIL", asyncParams);
     
 }
+if((wfTask == "Application Submittal") && matches(wfStatus,"Deemed Incomplete","Additional Info Required")) {
+    comment('**Sending email P_INCOMPLETE**');
+    var altID = capId.getCustomID();
+   var primaryEmail = "";
+    var primaryContactName = "";
+    var capContactResult = aa.people.getCapContactByCapID(capId);
+    if (capContactResult.getSuccess()) {
+        var capContactArray = capContactResult.getOutput();
+  
+        for (var contact in capContactArray){
+            var thisContact = capContactArray[contact].getPeople();
+            if(thisContact.flag == 'Y' ){
+                primaryEmail = thisContact.email;
+                primaryContactName = thisContact.getFirstName() + " " + thisContact.getLastName();
+            }
+        }
+    }
+    var asyncParams = aa.util.newHashMap();
+    addParameter(asyncParams, "vEmailTemplate", "P_INCOMPLETE");
+    addParameter(asyncParams, "vAltId", altID);
+    addParameter(asyncParams, "vToEmail", "ALLCONTACTS");
+    //addParameter(asyncParams, "vContactType", "Applicant");
+    addParameter(asyncParams, "vContactName", primaryContactName);
+    addParameter(asyncParams, "vReportModule", "Planning");
+    addParameter(asyncParams, "vReportName", "");
+    addParameter(asyncParams, "vReportAltId", altID);
+    aa.runAsyncScript("ASYNC_SEND_EMAIL", asyncParams);
+    
+}
 
 if (appMatch("Planning/Pre Application/NA/NA") && wfTask == "Public Workshop" && wfStatus == "Workshop Held") {
     var asyncParams = aa.util.newHashMap();
