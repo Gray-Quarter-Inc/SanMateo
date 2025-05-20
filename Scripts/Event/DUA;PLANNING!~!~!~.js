@@ -66,4 +66,15 @@ try {
 catch (e) {
     logDebug(e);
 }
-
+if (publicUser && (capStatus == "Additional Info Required" )) {
+    var workflowResult = aa.workflow.getTaskItems(capId, null, null, null, null, "Y");
+        if (workflowResult.getSuccess()) {
+            wfObj = workflowResult.getOutput();
+            for (var i in wfObj) {
+                var fTask = wfObj[i];
+                if (fTask.getActiveFlag().equals("Y")) {
+                    updateTask(fTask.getTaskDescription(), "Additional Info Received", "Set by EMSE", "");
+                }
+            }
+        }
+}
