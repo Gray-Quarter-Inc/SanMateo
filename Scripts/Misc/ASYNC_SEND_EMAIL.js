@@ -15,7 +15,7 @@ var debug = "";
 useAppSpecificGroupName = false
 
 try {
-	logDebug("ASYNC_SEND_EMAIL");
+	logDebug("ASYNC_SEND_EMAIL " + emailTemplate);
     
 
 	capId = aa.cap.getCapID(altId).getOutput();
