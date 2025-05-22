@@ -12,7 +12,7 @@ if (AInfo["Pre-Application Request Type"] == "Development Footprint Analysis"){
     removeFee("P136","FINAL")
 }
 if (AInfo["Pre-Application Request Type"] == 'Early Assistance Meeting for SB9'){
-    logDebug("Early Assistance Meeting-$400.00 ")
+    logDebug("Early Assistance Meeting - $400.00 ")
     updateFee("P144EAM", "P_PREAPP", "FINAL", 1, "N");
 }else {
     removeFee("P144EAM","FINAL")
