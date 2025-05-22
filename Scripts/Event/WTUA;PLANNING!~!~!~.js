@@ -79,11 +79,26 @@ if((wfTask == "Application Submittal") && matches(wfStatus,"Deemed Incomplete","
     
 }
 
-if (appMatch("Planning/Pre Application/NA/NA") && wfTask == "Public Workshop" && wfStatus == "Workshop Held") {
+if (appMatch("Planning/Pre Application/NA/NA") && wfTask == "Public Workshop" && wfStatus == "Workshop Summary Issued") {
+    var altID = capId.getCustomID();
+    var primaryEmail = "";
+     var primaryContactName = "";
+     var capContactResult = aa.people.getCapContactByCapID(capId);
+     if (capContactResult.getSuccess()) {
+         var capContactArray = capContactResult.getOutput();
+   
+         for (var contact in capContactArray){
+             var thisContact = capContactArray[contact].getPeople();
+             if(thisContact.flag == 'Y' ){
+                 primaryEmail = thisContact.email;
+                 primaryContactName = thisContact.getFirstName() + " " + thisContact.getLastName();
+             }
+         }
+     }
     var asyncParams = aa.util.newHashMap();
     addParameter(asyncParams, "vEmailTemplate", "P_PUBLIC_WORKSHOP_SUMMARY");
     addParameter(asyncParams, "vAltId", capId.getCustomID());
-    addParameter(asyncParams, "vContactType", "Applicant");
+    addParameter(asyncParams, "vContactType", "ALLCONTACTS");
     addParameter(asyncParams, "vDocumentType", "Public Workshop Summary");
     aa.runAsyncScript("ASYNC_SEND_EMAIL", asyncParams);
 }
