@@ -69,7 +69,7 @@ if((wfTask == "Application Submittal") && matches(wfStatus,"Deemed Incomplete","
     addParameter(asyncParams, "vEmailTemplate", "P_INCOMPLETE");
     addParameter(asyncParams, "vAltId", altID);
     addParameter(asyncParams, "vToEmail", "ALLCONTACTS");
-    addParameter(asyncParams,"$$wfComment$$", wfComment);
+    addParameter(asyncParams,"vwfComment", wfComment);
     //addParameter(asyncParams, "vContactType", "Applicant");
     addParameter(asyncParams, "vContactName", primaryContactName);
     addParameter(asyncParams, "vReportModule", "Planning");
